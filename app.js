@@ -5,9 +5,18 @@ app.use(express.json());
 
 let tasks = [];
 
+// ROOT ROUTE
+app.get('/', (req, res) => {
+  res.send("Smart Task Management API is running");
+});
+
 // CREATE TASK
 app.post('/tasks', (req, res) => {
-  const task = req.body;
+  const task = {
+    id: tasks.length,
+    ...req.body
+  };
+
   tasks.push(task);
   res.status(201).send(task);
 });
@@ -19,19 +28,23 @@ app.get('/tasks', (req, res) => {
 
 // UPDATE TASK
 app.put('/tasks/:id', (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   if (!tasks[id]) {
     return res.status(404).send("Task not found");
   }
 
-  tasks[id] = req.body;
+  tasks[id] = {
+    id: id,
+    ...req.body
+  };
+
   res.send(tasks[id]);
 });
 
 // DELETE TASK
 app.delete('/tasks/:id', (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   if (!tasks[id]) {
     return res.status(404).send("Task not found");
@@ -41,11 +54,12 @@ app.delete('/tasks/:id', (req, res) => {
   res.send("Task deleted");
 });
 
-// HEALTH CHECK (important for monitoring stage)
+// HEALTH CHECK (for monitoring stage)
 app.get('/health', (req, res) => {
   res.status(200).send("OK");
 });
 
+// RUN SERVER ONLY IF NOT IN TEST
 if (require.main === module) {
   app.listen(3000, () => {
     console.log("Server running on port 3000");
