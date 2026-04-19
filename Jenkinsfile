@@ -5,9 +5,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Installing Node.js...'
-                sh 'apt update'
-                sh 'apt install -y nodejs npm'
+                echo 'Installing dependencies...'
                 sh 'npm install'
             }
         }
@@ -21,13 +19,13 @@ pipeline {
 
         stage('Code Quality') {
             steps {
-                echo 'Code quality analysis (simulated with SonarQube)'
+                echo 'Code quality analysis using SonarQube (simulated)'
             }
         }
 
         stage('Security') {
             steps {
-                echo 'Security scan (simulated with Trivy)'
+                echo 'Security scan using Trivy (simulated)'
             }
         }
 
