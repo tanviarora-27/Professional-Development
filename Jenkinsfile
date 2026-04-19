@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18'
+        }
+    }
 
     stages {
 
@@ -44,8 +48,8 @@ pipeline {
 
         stage('Monitoring') {
             steps {
-                echo 'Monitoring running process...'
-                sh 'ps aux | grep node'
+                echo 'Monitoring process...'
+                sh 'ps'
             }
         }
     }
