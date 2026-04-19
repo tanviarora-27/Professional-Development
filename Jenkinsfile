@@ -1,15 +1,13 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-        }
-    }
+    agent any
 
     stages {
 
         stage('Build') {
             steps {
-                echo 'Building application...'
+                echo 'Installing Node.js...'
+                sh 'apt update'
+                sh 'apt install -y nodejs npm'
                 sh 'npm install'
             }
         }
@@ -23,13 +21,13 @@ pipeline {
 
         stage('Code Quality') {
             steps {
-                echo 'Code quality analysis (simulated)'
+                echo 'Code quality analysis (simulated with SonarQube)'
             }
         }
 
         stage('Security') {
             steps {
-                echo 'Security scan (simulated)'
+                echo 'Security scan (simulated with Trivy)'
             }
         }
 
@@ -42,14 +40,14 @@ pipeline {
 
         stage('Release') {
             steps {
-                echo 'Application released'
+                echo 'Application released to production'
             }
         }
 
         stage('Monitoring') {
             steps {
-                echo 'Monitoring process...'
-                sh 'ps'
+                echo 'Monitoring running process...'
+                sh 'ps aux | grep node'
             }
         }
     }
